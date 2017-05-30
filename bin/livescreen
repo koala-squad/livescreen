@@ -2,24 +2,28 @@
 
 const http = require('http');
 const fs = require('fs');
+const path = require('path');
 const proc = require('child_process');
 const socketio = require('socket.io');
 
+const command = 'screencapture -x -t jpg';
+const paths = {
+  html: path.resolve(__dirname, '../index.html'),
+  target: path.resolve('/tmp/shot.jpg')
+};
 const options = {
-  command: 'screencapture -x -t jpg',
-  target: 'shot.jpg',
   hostname: '0.0.0.0',
   port: 8080
 };
 
 const server = http.createServer((req, res) => {
-  fs.createReadStream('index.html').pipe(res);
+  fs.createReadStream(paths.html).pipe(res);
 });
 
 socketio(server).on('connection', socket => {
   const capture = () => {
-    proc.exec(`${options.command} ${options.target}`, () => {
-      let file = fs.readFileSync(options.target);
+    proc.exec(`${command} ${paths.target}`, () => {
+      let file = fs.readFileSync(paths.target);
       socket.emit('data', new Buffer(file).toString('base64'));
       capture();
     });
