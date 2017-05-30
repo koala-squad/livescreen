@@ -1,6 +1,9 @@
 {
   "name": "livescreen",
   "version": "0.0.0",
+  "bin": {
+    "livescreen": "bin/livescreen"
+  },
   "dependencies": {
     "socket.io": "^2.0.1"
   },
