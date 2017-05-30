@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <title>livescreen</title>
+    <style>
+      body { margin: 0; }
+      img { width: 100vw; }
+    </style>
+  </head>
+  <body>
+    <img>
+    <script src='/socket.io/socket.io.js'></script>
+    <script>
+      var socket = io();
+      var img = document.querySelector('img');
+      socket.on('connect', () => {
+        socket.on('data', data => {
+          img.src = 'data:image/png;base64,' + data;
+        });
+      });
+    </script>
+  </body>
+</html>
